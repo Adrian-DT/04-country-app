@@ -10,7 +10,7 @@ export const routes: Routes = [
 
   {
     path: 'country',
-    loadChildren: () => import('./country/country.routes'),  // .then(module => module.countryRoutes)
+    loadChildren: () => import('./country/country.routes'),   // .then(module => module.countryRoutes)
   },
 
   {

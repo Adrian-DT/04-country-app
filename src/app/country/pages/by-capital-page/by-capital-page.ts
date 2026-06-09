@@ -1,5 +1,6 @@
 import { Component, inject, resource, signal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { firstValueFrom, of } from 'rxjs';
 
 import { SearchInput } from "../../components/search-input/search-input";
 import { CountryList } from "../../components/country-list/country-list";
@@ -17,17 +18,30 @@ export class ByCapitalPage {
   query = signal('');
 
   // A partir de la versión de Angular 19 en adelante, podemos hacer uso de los resource para hacer peticiones asincronas y controlar errores.
-  countryResource = resource({
+  // Trabajando con Observable
+  countryResource = rxResource({
     params: () => ({ query: this.query() }),
-    loader: async({ params }) => {
+    stream: ({ params }) => {
       // Si query no tiene ningún valor, devuelve un array vacío.
-      if (!params.query) return [];
+      if (!params.query) return of([]);
 
-      return await firstValueFrom(
-        this.countryService.searchByCapital(params.query)
-      )
+      return this.countryService.searchByCapital(params.query)
     }
   })
+
+
+  // Utilizando promesas
+  // countryResource = resource({
+  //   params: () => ({ query: this.query() }),
+  //   loader: async({ params }) => {
+  //     // Si query no tiene ningún valor, devuelve un array vacío.
+  //     if (!params.query) return [];
+
+  //     return await firstValueFrom(
+  //       this.countryService.searchByCapital(params.query)
+  //     )
+  //   }
+  // })
 
 
 

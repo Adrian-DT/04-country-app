@@ -1,10 +1,9 @@
 import { Component, inject, resource, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+
 import { SearchInput } from "../../components/search-input/search-input";
 import { CountryList } from "../../components/country-list/country-list";
 import { CountryService } from '../../services/country.service';
-import { CountryMapper } from '../../mappers/country.mapper';
-import { Country } from '../../interfaces/country.interface';
-import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-by-capital-page',

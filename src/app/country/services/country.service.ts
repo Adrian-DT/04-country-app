@@ -30,4 +30,20 @@ export class CountryService {
     );
   }
 
+  searchByCountry(query: string): Observable<Country[]> {
+    // Pasamos la query recibida por parámetro a minúsculas
+    query = query.toLowerCase();
+
+    // Devolvemos la url de la petición a la API con la query
+    // Mediante pipe, usamos el mapper para obtener la información definida que nos interesa manejar
+    return this.http.get<RESTCountry[]>(`${API_URL}/name/${query}`).pipe(
+      map(resp => CountryMapper.mapRestCountryArrayToCountryArray(resp)),
+      // Con catchError podemos controlar el error, y devolver una excepción
+      catchError(error => {
+        console.log('Error fetching ', error);
+        return throwError(() => new Error(`No se pudo obtener paises con esa query: ${query}`));
+      })
+    );
+  }
+
 }

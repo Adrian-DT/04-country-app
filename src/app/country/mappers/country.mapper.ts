@@ -1,25 +1,24 @@
 import type { Country } from "../interfaces/country.interface";
-import type { RESTCountry } from "../interfaces/rest-countries.interfaces";
-
+import type { RESTCountry, Object as RestCountryItem } from "../interfaces/rest-countries.interfaces";
 
 export class CountryMapper {
 
-  // Método estatico para mapear los objetos recibidos por la API
-  static mapRestCountryToCountry( restCountry: RESTCountry ): Country {
+  static mapRestCountryToCountry(restCountry: RestCountryItem): Country {
     return {
-      // La capital, en caso de que tengamos más de una, las unimos con join, mediante una coma.
-      capital: restCountry.capital.join(','),
-      cca2: restCountry.cca2,
-      flag: restCountry.flag,
-      flagSvg: restCountry.flags.svg,
-      name: restCountry.translations['spa'].common ?? restCountry.name.common,
-      population: restCountry.population
+      capital: restCountry.capitals?.map(cap => cap.name).join(', ') ?? 'Sin capital',
+      cca2: restCountry.codes.alpha_2,
+      flag: restCountry.flag?.emoji ?? '',
+      flagSvg: restCountry.flag?.url_svg ?? '',
+      name: restCountry.names.translations?.['spa']?.common ?? restCountry.names.common,
+      population: restCountry.population ?? 0
     };
   }
-  // Método para obtener un array de la petición a la API, mappeada por la interfaz creada
-  static mapRestCountryArrayToCountryArray( restCountries: RESTCountry[] ):Country[] {
-    return restCountries.map( this.mapRestCountryToCountry);
+
+  static mapRestCountryArrayToCountryArray(restCountries: RestCountryItem[]): Country[] {
+    return restCountries.map(country => this.mapRestCountryToCountry(country));
   }
 
-
+  static mapResponseToCountryArray(response: RESTCountry): Country[] {
+    return this.mapRestCountryArrayToCountryArray(response.data.objects);
+  }
 }

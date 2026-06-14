@@ -1,0 +1,16 @@
+
+@if ( !countryResource.hasValue() ) {
+  <not-found />
+}
+
+@if (countryResource.isLoading()) {
+  <h1 class="text-3xl">Cargando...</h1>
+
+
+}
+
+@if ( countryResource.hasValue() ) {
+  <!-- Pasamos el valor del país al componente para trabajar con la información -->
+  <country-information [country]="countryResource.value()!" />
+}
+

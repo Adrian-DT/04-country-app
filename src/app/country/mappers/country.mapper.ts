@@ -10,7 +10,9 @@ export class CountryMapper {
       flag: restCountry.flag?.emoji ?? '',
       flagSvg: restCountry.flag?.url_svg ?? '',
       name: restCountry.names.translations?.['spa']?.common ?? restCountry.names.common,
-      population: restCountry.population ?? 0
+      population: restCountry.population ?? 0,
+      region: restCountry.region,
+      subRegion: restCountry.subregion,
     };
   }
 
